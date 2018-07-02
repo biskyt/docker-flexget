@@ -1,0 +1,30 @@
+version: '3.4'
+
+services:
+  flexget:
+    build:
+      # git clone transmission build into this directory
+      context: .
+      args:
+        DOCKER_UID: '1000'
+        FLEXGET_VERSION: '2.10.111'
+      dockerfile: Dockerfile.aarch64
+    environment:
+      TZ: 'Europe/London'
+      TRUSER: 'admin'
+      TRPASSWD: 'S3CureM3'
+      BLOCKLIST: 'no'
+      TR_ratio-limit: '0.1'
+      TR_speed-limit-up: '10'
+      TR_speed-limit-up-enabled: 'true'
+      TR_umask: '1'
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - /mnt/store1/docker/composer/downloader/config/flexget/.flexget:/home/flexget/.flexget
+      - /mnt/store1/docker/composer/downloader/config/flexget/torrents:/home/flexget/torrents
+      - /mnt/store1/downloads:/downloads
+      - /mnt/store1/videos:/videos
+    ports:
+      - "5050:5050"
