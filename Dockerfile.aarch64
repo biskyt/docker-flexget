@@ -12,7 +12,7 @@ VOLUME   /home/flexget/.flexget
 VOLUME   /home/flexget/torrents
 
 # Install FlexGet
-RUN      pip3 install -U pip --no-cache-dir && pip3 install flexget==${FLEXGET_VERSION} --no-cache-dir && pip3 install transmissionrpc --no-cache-dir && rm -rf ~/.cache/pip
+RUN      pip3 install -U pip --no-cache-dir && pip3 install flexget==${FLEXGET_VERSION} --no-cache-dir && pip3 install transmissionrpc --no-cache-dir && rm -rf ~/.cache/pip && flexget web passwd S3cureM3!
 
 # Add start script
 COPY     start.sh /home/flexget/
