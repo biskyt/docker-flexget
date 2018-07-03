@@ -2,6 +2,7 @@ FROM     arm64v8/python:3.5-alpine
 
 ARG      DOCKER_UID
 ARG      FLEXGET_VERSION
+# Note that flexget requires a long password with special characters
 ARG      WEB_PASSWD
 
 # Create a user to run the application
@@ -12,14 +13,19 @@ WORKDIR  /home/flexget
 VOLUME   /home/flexget/.flexget
 VOLUME   /home/flexget/torrents
 
-# Install FlexGet
-RUN      pip3 install -U pip --no-cache-dir && pip3 install flexget==${FLEXGET_VERSION} --no-cache-dir && pip3 install transmissionrpc --no-cache-dir && rm -rf ~/.cache/pip && flexget web passwd ${WEB_PASSWD}
-
 # Add start script
 COPY     start.sh /home/flexget/
 RUN      chmod +x ./start.sh
 
-COPY     config.yml /home/flexget/.flexget/
+COPY     config.yml /root/.flexget/
+
+# Install FlexGet
+RUN      pip3 install -U pip --no-cache-dir && \
+         pip3 install flexget==${FLEXGET_VERSION} --no-cache-dir && \
+         pip3 install transmissionrpc --no-cache-dir && \
+         rm -rf ~/.cache/pip && \
+         flexget web passwd ${WEB_PASSWD} && \
+         apk --no-cache --no-progress add bash curl
 
 HEALTHCHECK --interval=60s --timeout=15s --start-period=120s \
     CMD curl -L 'https://api.ipify.org'

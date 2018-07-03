@@ -1,1 +1,9 @@
 web_server: yes
+
+tasks:
+  test task:
+   kodi_library:
+      action: scan
+      category: video
+      url: http://192.168.0.222
+      port: 8080
